@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Demo Page by Sieun Kim</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <style>
+        .fakeimg {
+            height: 200px;
+            background: #aaa;
+        }
+    </style>
+</head>
+<body>
+
+<div class="p-5 bg-primary text-white text-center">
+    <h1>Demo Page by Sieun Kim</h1>
+    <p>서버 개발자 과제 - 파일 확장자 차단</p>
+</div>
+
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+    <div class="container-fluid">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" href="#">과제</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Who is Sieun Kim?</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Skills</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-sm-4">
+            <h2>Who is Sieun Kim?</h2>
+            <h5>Photo of me:</h5>
+            <div><img src="./img/sieun_kim.jpg"/></div>
+            <p>건국 대학교 소프트웨어학과 졸업</p>
+            <p>SSAFY Java 전공 트랙 이수</p>
+            <p>신입 백엔드 개발자</p>
+            <h3 class="mt-4">Some Links</h3>
+            <p>저에 대하여 더 알고 싶으시다면 다음의 링크를 방문해 주세요:)</p>
+            <ul class="nav nav-pills flex-column">
+                <li class="nav-item">
+                    <a class="nav-link active" href="https://olivine-string-e0a.notion.site/44760ff5b10b4bb7a66399ad1143c337?pvs=4">노션 포트폴리오</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="https://github.com/marie043">깃허브</a>
+                </li>
+            </ul>
+            <hr class="d-sm-none">
+        </div>
+        <div class="col-sm-8">
+            <h2>과제</h2>
+            <h5>제출일: 2024.05.12 (일)</h5>
+            <div>
+                <div class="form-check">
+                    <input type="checkbox" name="extension" id="bat" class="form-check-input"/><label for="bat" class="form-check-label">bat</label>
+                </div>
+                <div class="form-check">
+                    <input type="checkbox" name="extension" id="cmd" class="form-check-input"/><label for="cmd" class="form-check-label">cmd</label>
+                </div>
+                <div class="form-check">
+                    <input type="checkbox" name="extension" id="com" class="form-check-input"/><label for="com" class="form-check-label">com</label>
+                </div>
+                <div class="form-check">
+                    <input type="checkbox" name="extension" id="cpi" class="form-check-input"/><label for="cpi" class="form-check-label">cpi</label>
+                </div>
+                <div class="form-check">
+                    <input type="checkbox" name="extension" id="exc" class="form-check-input"/><label for="exc" class="form-check-label">exc</label>
+                </div>
+                <div class="form-check">
+                    <input type="checkbox" name="extension" id="scr" class="form-check-input"/><label for="scr" class="form-check-label">scr</label>
+                </div>
+                <div class="form-check">
+                    <input type="checkbox" name="extension" id="js" class="form-check-input"/><label for="js" class="form-check-label">js</label>
+                </div>
+                <div>
+                    <input type="file" class="form-control" placeholder="파일을 선택해 주세요" id="inputFile"/>
+                </div>
+                <div>
+                    <textarea class="form-control" disabled  id="storedFile"></textarea>
+                </div>
+                <div>
+                    <input type="button" value="전송" class="form-control"/>
+                </div>
+            </div>
+
+            <h2 class="mt-5">Skills</h2>
+            <h5>Title description, Sep 2, 2020</h5>
+            <div class="fakeimg">Fake Image</div>
+            <p>Some text..</p>
+            <p>Sunt in culpa qui officia deserunt mollit anim id est laborum consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.</p>
+        </div>
+    </div>
+</div>
+
+<div class="mt-5 p-4 bg-dark text-white text-center">
+    <p>감사합니다.</p>
+</div>
+</body>
+<script>
+    let files = Array();
+    let ta = document.getElementById("storedFile");
+    document.getElementById('inputFile').addEventListener('change', e => {
+        let i = 0;
+        while(files.length < 200 && e.target.files[i]){
+            files.push(e.target.files[i++]);
+            console.log(files);
+        }
+        let file_names = '';
+        for(let j = 0; j < files.length; j++){
+            file_names += files[j].name + '\t';
+        }
+        ta.innerText = file_names;
+        if(e.target.files[i]){
+            alert('첨부할 수 있는 파일을 200개 입니다.');
+        }
+    });
+</script>
+</html>
