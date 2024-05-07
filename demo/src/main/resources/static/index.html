@@ -62,25 +62,31 @@
             <h5>제출일: 2024.05.12 (일)</h5>
             <div>
                 <div class="form-check">
-                    <input type="checkbox" name="extension" id="bat" class="form-check-input"/><label for="bat" class="form-check-label">bat</label>
+                    <input type="checkbox" name="extension" id="bat" class="form-check-input" value="bat"/><label for="bat" class="form-check-label">bat</label>
                 </div>
                 <div class="form-check">
-                    <input type="checkbox" name="extension" id="cmd" class="form-check-input"/><label for="cmd" class="form-check-label">cmd</label>
+                    <input type="checkbox" name="extension" id="cmd" class="form-check-input" value="cmd"/><label for="cmd" class="form-check-label">cmd</label>
                 </div>
                 <div class="form-check">
-                    <input type="checkbox" name="extension" id="com" class="form-check-input"/><label for="com" class="form-check-label">com</label>
+                    <input type="checkbox" name="extension" id="com" class="form-check-input" value="com"/><label for="com" class="form-check-label">com</label>
                 </div>
                 <div class="form-check">
-                    <input type="checkbox" name="extension" id="cpi" class="form-check-input"/><label for="cpi" class="form-check-label">cpi</label>
+                    <input type="checkbox" name="extension" id="cpi" class="form-check-input" value="cpi"/><label for="cpi" class="form-check-label">cpi</label>
                 </div>
                 <div class="form-check">
-                    <input type="checkbox" name="extension" id="exc" class="form-check-input"/><label for="exc" class="form-check-label">exc</label>
+                    <input type="checkbox" name="extension" id="exe" class="form-check-input" value="exc"/><label for="exe" class="form-check-label">exe</label>
                 </div>
                 <div class="form-check">
-                    <input type="checkbox" name="extension" id="scr" class="form-check-input"/><label for="scr" class="form-check-label">scr</label>
+                    <input type="checkbox" name="extension" id="scr" class="form-check-input" value="scr"/><label for="scr" class="form-check-label">scr</label>
                 </div>
                 <div class="form-check">
-                    <input type="checkbox" name="extension" id="js" class="form-check-input"/><label for="js" class="form-check-label">js</label>
+                    <input type="checkbox" name="extension" id="js" class="form-check-input" value="js"/><label for="js" class="form-check-label">js</label>
+                </div>
+                <div>
+                    <input type="text" placeholder="확장자를 입력해 주세요." id="custom-extension" class="form-control"/>
+                </div>
+                <div>
+                    <textarea class="form-control" disabled id="custom-extensions"></textarea>
                 </div>
                 <div>
                     <input type="file" class="form-control" placeholder="파일을 선택해 주세요" id="inputFile"/>
@@ -89,7 +95,7 @@
                     <textarea class="form-control" disabled  id="storedFile"></textarea>
                 </div>
                 <div>
-                    <input type="button" value="전송" class="form-control"/>
+                    <input type="button" value="전송" class="form-control" id="send-btn"/>
                 </div>
             </div>
 
@@ -123,6 +129,39 @@
         if(e.target.files[i]){
             alert('첨부할 수 있는 파일을 200개 입니다.');
         }
+    });
+    let extensions = Array();
+    let custom_ta = document.getElementById('custom-extensions');
+    document.getElementById("custom-extension").addEventListener('change', e => {
+        let v = document.getElementById('custom-extension').value
+        extensions.push(v);
+        let s = '';
+        for(let i = 0; i < extensions.length; i++){
+            s += extensions[i] + '\t';
+        }
+        custom_ta.innerText = s;
+        document.getElementById('custom-extension').value = '';
+    });
+    document.getElementById('send-btn').addEventListener('click', e => {
+        document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+            if(checkbox.checked == true)
+                extensions.push(checkbox.value);
+        });
+        const data = {
+            extensions,
+            files
+        };
+        fetch('https://localhost:8080/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        }).then(res => {
+            return res.json();
+        }).then(obj => {
+            alert(obj.msg);
+        });
     });
 </script>
 </html>
