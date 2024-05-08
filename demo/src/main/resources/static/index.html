@@ -126,48 +126,47 @@
     const scr = document.getElementById('scr');
     const js = document.getElementById('js');
     fetch('http://localhost:8080/api/extension',{method: 'GET'}).then(res => res.json()).then(data => {
-        if(data.msg){
-            alert(data.msg);
-            return;
-        }
-        let extensions = data.list;
-        for (let i = 0; i < extensions.length; i++){
-            let extension = extensions[i];
-            if(extension == 'bat'){
-                bat.checked = true;
-                continue;
-            }
-            if(extension == 'cmd'){
-                cmd.checked = true;
-                continue;
-            }
-            if(extension == 'com'){
-                com.checked = true;
-                continue;
-            }
-            if(extension == 'cpi'){
-                cpi.checked = true;
-            }
-            if(extension == 'exe'){
-                exe.checked = true;
-                continue;
-            }
-            if(extension == 'scr'){
-                scr.checked = true;
-                continue;
-            }
-            if(extension == js){
-                js.checked = true;
-                continue;
-            }
-            let s = document.getElementById('custom-extensions').innerHTML;
-            const v = extension;
-            s += `<div><button id="custom-${v}" class="btn btn-outline-danger btn-sm">${v}</button></div><div class="extension-block"></div>`;
-            document.getElementById('custom-extensions').innerHTML = s;
-        }
+        // if(data.msg){
+        //     alert(data.msg);
+        //     return;
+        // }
+        // let extensions = data.list;
+        // for (let i = 0; i < extensions.length; i++){
+        //     let extension = extensions[i];
+        //     if(extension == 'bat'){
+        //         bat.checked = true;
+        //         continue;
+        //     }
+        //     if(extension == 'cmd'){
+        //         cmd.checked = true;
+        //         continue;
+        //     }
+        //     if(extension == 'com'){
+        //         com.checked = true;
+        //         continue;
+        //     }
+        //     if(extension == 'cpi'){
+        //         cpi.checked = true;
+        //     }
+        //     if(extension == 'exe'){
+        //         exe.checked = true;
+        //         continue;
+        //     }
+        //     if(extension == 'scr'){
+        //         scr.checked = true;
+        //         continue;
+        //     }
+        //     if(extension == js){
+        //         js.checked = true;
+        //         continue;
+        //     }
+        //     let s = document.getElementById('custom-extensions').innerHTML;
+        //     const v = extension;
+        //     s += `<div><button id="custom-${v}" class="btn btn-outline-danger btn-sm">${v}</button></div><div class="extension-block"></div>`;
+        //     document.getElementById('custom-extensions').innerHTML = s;
+        // }
     });
     let file = null;
-    let ta = document.getElementById("storedFile");
     document.getElementById('inputFile').addEventListener('change', e => {
         if(e.target.files[0]) {
             file = e.target.files[0];
@@ -179,10 +178,22 @@
         if(v){
 
         }
-        let s = document.getElementById('custom-extensions').innerHTML;
-        s += `<div><button id="custom-${v}" class="btn btn-outline-danger btn-sm">${v}</button></div><div class="extension-block"></div>`;
-        custom_ta.innerHTML = s;
-        document.getElementById('custom-extension').value = '';
+        fetch('http://localhost:8080/api/extension', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({'extension': v})
+        }).then(res => res.json()).then(data => {
+            if(data.msg){
+                alert(data.msg);
+                return;
+            }
+            let v = data.extension;
+            console.log(data);
+            let s = document.getElementById('custom-extensions').innerHTML;
+            s += `<div><button id="custom-${v}" class="btn btn-outline-danger btn-sm">${v}</button></div><div class="extension-block"></div>`;
+            custom_ta.innerHTML = s;
+            document.getElementById('custom-extension').value = '';
+        });
 
     });
 </script>

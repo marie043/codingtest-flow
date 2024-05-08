@@ -4,7 +4,6 @@ import java.util.Map;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.example.demo.file.service.FileService;
 import com.example.demo.file.vo.ExtensionVo;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -30,7 +30,7 @@ public class FileController {
 	}
 
 	@PostMapping("/extension")
-	public Map addExtension(@RequestBody ExtensionVo vo){
+	public Map addExtension(@RequestBody @Valid  ExtensionVo vo){
 		return fileService.addExtension(vo.getExtension());
 	}
 
@@ -39,8 +39,8 @@ public class FileController {
 		return null;
 	}
 
-	@DeleteMapping("/extension/{extension}")
-	public Map deleteExtension(@PathVariable("extension") ExtensionVo vo){
+	@DeleteMapping("/extension")
+	public Map deleteExtension(@RequestBody @Valid ExtensionVo vo){
 		return null;
 	}
 

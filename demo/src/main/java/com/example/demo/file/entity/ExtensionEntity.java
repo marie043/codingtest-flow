@@ -21,6 +21,6 @@ public class ExtensionEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer seq;
 
-	@Column(name = "extension_value")
+	@Column(name = "value")
 	private String value;
 }
