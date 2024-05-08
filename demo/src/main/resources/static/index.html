@@ -7,9 +7,15 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <style>
-        .fakeimg {
-            height: 200px;
-            background: #aaa;
+        #custom-extensions {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            margin-top: 2%;
+            margin-bottom: 2%;
+        }
+        .extension-block {
+            width: 3%;
         }
     </style>
 </head>
@@ -40,11 +46,15 @@
     <div class="row">
         <div class="col-sm-4">
             <h2>Who is Sieun Kim?</h2>
-            <h5>Photo of me:</h5>
-            <div><img src="./img/sieun_kim.jpg"/></div>
-            <p>건국 대학교 소프트웨어학과 졸업</p>
-            <p>SSAFY Java 전공 트랙 이수</p>
-            <p>신입 백엔드 개발자</p>
+            <div class="card">
+                <h5 class="card-header">Photo of me:</h5>
+                <div class="container"><img src="./img/sieun_kim.jpg" class="card-img"/></div>
+                <div class="card-body">
+                    <p>건국 대학교 소프트웨어학과 졸업</p>
+                    <p>SSAFY Java 전공 트랙 이수</p>
+                    <p>신입 백엔드 개발자</p>
+                </div>
+            </div>
             <h3 class="mt-4">Some Links</h3>
             <p>저에 대하여 더 알고 싶으시다면 다음의 링크를 방문해 주세요:)</p>
             <ul class="nav nav-pills flex-column">
@@ -86,16 +96,11 @@
                     <input type="text" placeholder="확장자를 입력해 주세요." id="custom-extension" class="form-control"/>
                 </div>
                 <div>
-                    <textarea class="form-control" disabled id="custom-extensions"></textarea>
+                    <div class="container-fluid" id="custom-extensions"></div>
                 </div>
-                <div>
+                <div class="input-group">
                     <input type="file" class="form-control" placeholder="파일을 선택해 주세요" id="inputFile"/>
-                </div>
-                <div>
-                    <textarea class="form-control" disabled  id="storedFile"></textarea>
-                </div>
-                <div>
-                    <input type="button" value="전송" class="form-control" id="send-btn"/>
+                    <button type="button" class="input-group-append btn btn-primary">SEND</button>
                 </div>
             </div>
 
@@ -113,55 +118,72 @@
 </div>
 </body>
 <script>
-    let files = Array();
-    let ta = document.getElementById("storedFile");
-    document.getElementById('inputFile').addEventListener('change', e => {
-        let i = 0;
-        while(files.length < 200 && e.target.files[i]){
-            files.push(e.target.files[i++]);
-            console.log(files);
+    const bat = document.getElementById('bat');
+    const cmd = document.getElementById('cmd');
+    const com = document.getElementById('com');
+    const cpi = document.getElementById('cpi');
+    const exe = document.getElementById('exe');
+    const scr = document.getElementById('scr');
+    const js = document.getElementById('js');
+    fetch('http://localhost:8080/api/extension',{method: 'GET'}).then(res => res.json()).then(data => {
+        if(data.msg){
+            alert(data.msg);
+            return;
         }
-        let file_names = '';
-        for(let j = 0; j < files.length; j++){
-            file_names += files[j].name + '\t';
-        }
-        ta.innerText = file_names;
-        if(e.target.files[i]){
-            alert('첨부할 수 있는 파일을 200개 입니다.');
+        let extensions = data.list;
+        for (let i = 0; i < extensions.length; i++){
+            let extension = extensions[i];
+            if(extension == 'bat'){
+                bat.checked = true;
+                continue;
+            }
+            if(extension == 'cmd'){
+                cmd.checked = true;
+                continue;
+            }
+            if(extension == 'com'){
+                com.checked = true;
+                continue;
+            }
+            if(extension == 'cpi'){
+                cpi.checked = true;
+            }
+            if(extension == 'exe'){
+                exe.checked = true;
+                continue;
+            }
+            if(extension == 'scr'){
+                scr.checked = true;
+                continue;
+            }
+            if(extension == js){
+                js.checked = true;
+                continue;
+            }
+            let s = document.getElementById('custom-extensions').innerHTML;
+            const v = extension;
+            s += `<div><button id="custom-${v}" class="btn btn-outline-danger btn-sm">${v}</button></div><div class="extension-block"></div>`;
+            document.getElementById('custom-extensions').innerHTML = s;
         }
     });
-    let extensions = Array();
+    let file = null;
+    let ta = document.getElementById("storedFile");
+    document.getElementById('inputFile').addEventListener('change', e => {
+        if(e.target.files[0]) {
+            file = e.target.files[0];
+        }
+    });
     let custom_ta = document.getElementById('custom-extensions');
     document.getElementById("custom-extension").addEventListener('change', e => {
         let v = document.getElementById('custom-extension').value
-        extensions.push(v);
-        let s = '';
-        for(let i = 0; i < extensions.length; i++){
-            s += extensions[i] + '\t';
+        if(v){
+
         }
-        custom_ta.innerText = s;
+        let s = document.getElementById('custom-extensions').innerHTML;
+        s += `<div><button id="custom-${v}" class="btn btn-outline-danger btn-sm">${v}</button></div><div class="extension-block"></div>`;
+        custom_ta.innerHTML = s;
         document.getElementById('custom-extension').value = '';
-    });
-    document.getElementById('send-btn').addEventListener('click', e => {
-        document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
-            if(checkbox.checked == true)
-                extensions.push(checkbox.value);
-        });
-        const data = {
-            extensions,
-            files
-        };
-        fetch('https://localhost:8080/', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        }).then(res => {
-            return res.json();
-        }).then(obj => {
-            alert(obj.msg);
-        });
+
     });
 </script>
 </html>
