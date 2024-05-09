@@ -3,6 +3,8 @@ package com.example.demo.file.service;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
@@ -32,6 +34,38 @@ public class FileServiceImpl implements FileService{
 		entity = extensionRepository.save(entity);
 		data.put("msg", null);
 		data.put("extension", entity.getValue());
+		return data;
+	}
+
+	@Override
+	public Map listExtensions() {
+		Map<String, Object> data = new HashMap<>();
+		List<ExtensionEntity> entities = extensionRepository.findAll();
+		if(entities.isEmpty()){
+			data.put("msg", "차단된 확장자가 없습니다.");
+			data.put("list", null);
+			return data;
+		}
+		List<String> list = entities.stream().map(entity -> {
+			return entity.getValue();
+		}).collect(Collectors.toList());
+		data.put("msg", null);
+		data.put("list", list);
+		return data;
+	}
+
+	@Override
+	public Map deleteExtension(String extension) {
+		Map<String, String> data = new HashMap<>();
+		List<ExtensionEntity> list = extensionRepository.findAllByValue(extension);
+		if(list.isEmpty()) {
+			data.put("msg", "등록 되지 않는 확장자 입니다.");
+			return data;
+		}
+		for(ExtensionEntity entity : list){
+			extensionRepository.delete(entity);
+		}
+		data.put("msg", null);
 		return data;
 	}
 }

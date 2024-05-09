@@ -36,12 +36,12 @@ public class FileController {
 
 	@GetMapping("/extension")
 	public Map listExtensions(){
-		return null;
+		return fileService.listExtensions();
 	}
 
 	@DeleteMapping("/extension")
 	public Map deleteExtension(@RequestBody @Valid ExtensionVo vo){
-		return null;
+		return fileService.deleteExtension(vo.getExtension());
 	}
 
 }

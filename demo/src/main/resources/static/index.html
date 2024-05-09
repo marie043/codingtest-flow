@@ -17,6 +17,9 @@
         .extension-block {
             width: 3%;
         }
+        .btn-group {
+            flex-wrap: wrap;
+        }
     </style>
 </head>
 <body>
@@ -70,35 +73,24 @@
         <div class="col-sm-8">
             <h2>과제</h2>
             <h5>제출일: 2024.05.12 (일)</h5>
-            <div>
-                <div class="form-check">
-                    <input type="checkbox" name="extension" id="bat" class="form-check-input" value="bat"/><label for="bat" class="form-check-label">bat</label>
+            <div class="card">
+                <div class="card-body btn-group">
+                    <input type="checkbox" name="extension" id="bat" class="btn-check" value="bat"/><label for="bat" class="btn btn-outline-danger">bat</label>
+                    <input type="checkbox" name="extension" id="cmd" class="btn-check" value="cmd"/><label for="cmd" class="btn btn-outline-danger">cmd</label>
+                    <input type="checkbox" name="extension" id="com" class="btn-check" value="com"/><label for="com" class="btn btn-outline-danger">com</label>
+                    <input type="checkbox" name="extension" id="cpi" class="btn-check" value="cpi"/><label for="cpi" class="btn btn-outline-danger">cpi</label>
+                    <input type="checkbox" name="extension" id="exe" class="btn-check" value="exc"/><label for="exe" class="btn btn-outline-danger">exe</label>
+                    <input type="checkbox" name="extension" id="scr" class="btn-check" value="scr"/><label for="scr" class="btn btn-outline-danger">scr</label>
+                    <input type="checkbox" name="extension" id="js" class="btn-check" value="js"/><label for="js" class="btn btn-outline-danger">js</label>
                 </div>
-                <div class="form-check">
-                    <input type="checkbox" name="extension" id="cmd" class="form-check-input" value="cmd"/><label for="cmd" class="form-check-label">cmd</label>
-                </div>
-                <div class="form-check">
-                    <input type="checkbox" name="extension" id="com" class="form-check-input" value="com"/><label for="com" class="form-check-label">com</label>
-                </div>
-                <div class="form-check">
-                    <input type="checkbox" name="extension" id="cpi" class="form-check-input" value="cpi"/><label for="cpi" class="form-check-label">cpi</label>
-                </div>
-                <div class="form-check">
-                    <input type="checkbox" name="extension" id="exe" class="form-check-input" value="exc"/><label for="exe" class="form-check-label">exe</label>
-                </div>
-                <div class="form-check">
-                    <input type="checkbox" name="extension" id="scr" class="form-check-input" value="scr"/><label for="scr" class="form-check-label">scr</label>
-                </div>
-                <div class="form-check">
-                    <input type="checkbox" name="extension" id="js" class="form-check-input" value="js"/><label for="js" class="form-check-label">js</label>
-                </div>
-                <div>
+
+                <div class="card-body">
                     <input type="text" placeholder="확장자를 입력해 주세요." id="custom-extension" class="form-control"/>
                 </div>
-                <div>
+                <div class="card-body">
                     <div class="container-fluid" id="custom-extensions"></div>
                 </div>
-                <div class="input-group">
+                <div class="input-group card-footer">
                     <input type="file" class="form-control" placeholder="파일을 선택해 주세요" id="inputFile"/>
                     <button type="button" class="input-group-append btn btn-primary">SEND</button>
                 </div>
@@ -126,45 +118,45 @@
     const scr = document.getElementById('scr');
     const js = document.getElementById('js');
     fetch('http://localhost:8080/api/extension',{method: 'GET'}).then(res => res.json()).then(data => {
-        // if(data.msg){
-        //     alert(data.msg);
-        //     return;
-        // }
-        // let extensions = data.list;
-        // for (let i = 0; i < extensions.length; i++){
-        //     let extension = extensions[i];
-        //     if(extension == 'bat'){
-        //         bat.checked = true;
-        //         continue;
-        //     }
-        //     if(extension == 'cmd'){
-        //         cmd.checked = true;
-        //         continue;
-        //     }
-        //     if(extension == 'com'){
-        //         com.checked = true;
-        //         continue;
-        //     }
-        //     if(extension == 'cpi'){
-        //         cpi.checked = true;
-        //     }
-        //     if(extension == 'exe'){
-        //         exe.checked = true;
-        //         continue;
-        //     }
-        //     if(extension == 'scr'){
-        //         scr.checked = true;
-        //         continue;
-        //     }
-        //     if(extension == js){
-        //         js.checked = true;
-        //         continue;
-        //     }
-        //     let s = document.getElementById('custom-extensions').innerHTML;
-        //     const v = extension;
-        //     s += `<div><button id="custom-${v}" class="btn btn-outline-danger btn-sm">${v}</button></div><div class="extension-block"></div>`;
-        //     document.getElementById('custom-extensions').innerHTML = s;
-        // }
+        if(data.msg){
+            console.log(data.msg);
+            return;
+        }
+        let extensions = data.list;
+        for (let i = 0; i < extensions.length; i++){
+            let extension = extensions[i];
+            if(extension == 'bat'){
+                bat.checked = true;
+                continue;
+            }
+            if(extension == 'cmd'){
+                cmd.checked = true;
+                continue;
+            }
+            if(extension == 'com'){
+                com.checked = true;
+                continue;
+            }
+            if(extension == 'cpi'){
+                cpi.checked = true;
+            }
+            if(extension == 'exe'){
+                exe.checked = true;
+                continue;
+            }
+            if(extension == 'scr'){
+                scr.checked = true;
+                continue;
+            }
+            if(extension == 'js'){
+                js.checked = true;
+                continue;
+            }
+            let s = document.getElementById('custom-extensions').innerHTML;
+            const v = extension;
+            s += `<div id="extension-${v}"><button type="button" class="btn btn-outline-danger btn-sm" onclick="delete_extension('${v}');">${v}</button></div><div class="extension-block"></div>`;
+            document.getElementById('custom-extensions').innerHTML = s;
+        }
     });
     let file = null;
     document.getElementById('inputFile').addEventListener('change', e => {
@@ -190,11 +182,53 @@
             let v = data.extension;
             console.log(data);
             let s = document.getElementById('custom-extensions').innerHTML;
-            s += `<div><button id="custom-${v}" class="btn btn-outline-danger btn-sm">${v}</button></div><div class="extension-block"></div>`;
+            s += `<div id="extension-${v}"><button type="button" class="btn btn-outline-danger btn-sm" onclick="delete_extension('${v}');">${v}</button></div><div class="extension-block"></div>`;
             custom_ta.innerHTML = s;
             document.getElementById('custom-extension').value = '';
         });
-
     });
+    document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+        checkbox.addEventListener('change', event => {
+            if(checkbox.checked){
+                fetch('http://localhost:8080/api/extension', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({'extension': checkbox.value})
+                }).then(res => res.json()).then(data => {
+                    if(data.msg){
+                        alert(data.msg);
+                        return;
+                    }
+                });
+            }else {
+                fetch('http://localhost:8080/api/extension', {
+                    method: 'DELETE',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({'extension': checkbox.value})
+                }).then(res => res.json()).then(data => {
+                    if(data.msg){
+                        alert(msg);
+                        checkbox.checked = true;
+                        return;
+                    }
+                    alert(`${checkbox.value}가 차단 확장자에서 삭제 되었습니다.`);
+                });
+            }
+        });
+    });
+    function delete_extension(extension){
+        fetch('http://localhost:8080/api/extension', {
+            method: 'DELETE',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({'extension': extension})
+        }).then(res => res.json()).then(data => {
+            if(data.msg){
+                alert(msg);
+                return;
+            }
+            document.getElementById(`extension-${extension}`).remove();
+            alert(`${extension}가 차단 확장자에서 삭제 되었습니다.`);
+        });
+    }
 </script>
 </html>
