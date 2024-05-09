@@ -11,8 +11,6 @@
             display: flex;
             flex-direction: row;
             flex-wrap: wrap;
-            margin-top: 2%;
-            margin-bottom: 2%;
         }
         .extension-block {
             width: 3%;
@@ -91,8 +89,8 @@
                     <div class="container-fluid" id="custom-extensions"></div>
                 </div>
                 <div class="input-group card-footer">
-                    <input type="file" class="form-control" placeholder="파일을 선택해 주세요" id="inputFile"/>
-                    <button type="button" class="input-group-append btn btn-primary">SEND</button>
+                    <input type="file" class="form-control" placeholder="파일을 선택해 주세요" id="input-file"/>
+                    <button type="button" class="input-group-append btn btn-primary" id="send-btn">SEND</button>
                 </div>
             </div>
 
@@ -117,6 +115,8 @@
     const exe = document.getElementById('exe');
     const scr = document.getElementById('scr');
     const js = document.getElementById('js');
+    let file;
+    const custom_ta = document.getElementById('custom-extensions');
     fetch('http://localhost:8080/api/extension',{method: 'GET'}).then(res => res.json()).then(data => {
         if(data.msg){
             console.log(data.msg);
@@ -158,18 +158,8 @@
             document.getElementById('custom-extensions').innerHTML = s;
         }
     });
-    let file = null;
-    document.getElementById('inputFile').addEventListener('change', e => {
-        if(e.target.files[0]) {
-            file = e.target.files[0];
-        }
-    });
-    let custom_ta = document.getElementById('custom-extensions');
     document.getElementById("custom-extension").addEventListener('change', e => {
         let v = document.getElementById('custom-extension').value
-        if(v){
-
-        }
         fetch('http://localhost:8080/api/extension', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
@@ -216,6 +206,20 @@
             }
         });
     });
+    document.getElementById('input-file').addEventListener('change', e => {
+        file = e.target.files[0];
+    });
+    document.getElementById('send-btn').addEventListener('click', e => {
+        const formData = new FormData();
+        formData.append('file', file);
+        fetch('http://localhost:8080/api/file', {
+            method: 'POST',
+            // headers: {'Content-Type': 'multipart/form-data'},
+            body: formData
+        }).then(res => res.json()).then(data => {
+            alert(data.msg);
+        });
+    });
     function delete_extension(extension){
         fetch('http://localhost:8080/api/extension', {
             method: 'DELETE',
@@ -223,7 +227,7 @@
             body: JSON.stringify({'extension': extension})
         }).then(res => res.json()).then(data => {
             if(data.msg){
-                alert(msg);
+                alert(data.msg);
                 return;
             }
             document.getElementById(`extension-${extension}`).remove();

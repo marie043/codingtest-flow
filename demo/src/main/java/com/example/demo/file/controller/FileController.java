@@ -25,8 +25,7 @@ public class FileController {
 
 	@PostMapping("/file")
 	public Map addFile(@RequestParam("file") MultipartFile file){
-		System.out.println(file.getName());
-		return null;
+		return fileService.addFile(file);
 	}
 
 	@PostMapping("/extension")

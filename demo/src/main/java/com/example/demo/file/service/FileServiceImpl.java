@@ -6,7 +6,10 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.apache.catalina.util.StringUtil;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.example.demo.file.entity.ExtensionEntity;
 import com.example.demo.file.repository.ExtensionRepository;
@@ -66,6 +69,23 @@ public class FileServiceImpl implements FileService{
 			extensionRepository.delete(entity);
 		}
 		data.put("msg", null);
+		return data;
+	}
+
+	@Override
+	public Map addFile(MultipartFile file) {
+		Map<String, String> data = new HashMap<>();
+		if(file == null){
+			data.put("msg", "파일이 입력되지 않았습니다.");
+			return data;
+		}
+		String extension = StringUtils.getFilenameExtension(file.getOriginalFilename());
+		List<ExtensionEntity> list = extensionRepository.findAllByValue(extension);
+		if(list.isEmpty()) {
+			data.put("msg", "파일이 정상적으로 업로드 되었습니다.");
+		}else {
+			data.put("msg", "파일이 확장자 차단에 의하여 업로드 실패 했습니다.");
+		}
 		return data;
 	}
 }
