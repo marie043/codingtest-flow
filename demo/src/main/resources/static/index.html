@@ -117,7 +117,7 @@
     const js = document.getElementById('js');
     let file;
     const custom_ta = document.getElementById('custom-extensions');
-    fetch('http://localhost:8080/api/extension',{method: 'GET'}).then(res => res.json()).then(data => {
+    fetch('http://ec2-13-54-204-8.ap-southeast-2.compute.amazonaws.com:8080/api/extension',{method: 'GET'}).then(res => res.json()).then(data => {
         if(data.msg){
             console.log(data.msg);
             return;
@@ -160,7 +160,7 @@
     });
     document.getElementById("custom-extension").addEventListener('change', e => {
         let v = document.getElementById('custom-extension').value
-        fetch('http://localhost:8080/api/extension', {
+        fetch('http://ec2-13-54-204-8.ap-southeast-2.compute.amazonaws.com:8080/api/extension', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({'extension': v})
@@ -180,7 +180,7 @@
     document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
         checkbox.addEventListener('change', event => {
             if(checkbox.checked){
-                fetch('http://localhost:8080/api/extension', {
+                fetch('http://ec2-13-54-204-8.ap-southeast-2.compute.amazonaws.com:8080/api/extension', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({'extension': checkbox.value})
@@ -191,7 +191,7 @@
                     }
                 });
             }else {
-                fetch('http://localhost:8080/api/extension', {
+                fetch('http://ec2-13-54-204-8.ap-southeast-2.compute.amazonaws.com:8080/api/extension', {
                     method: 'DELETE',
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({'extension': checkbox.value})
@@ -212,7 +212,7 @@
     document.getElementById('send-btn').addEventListener('click', e => {
         const formData = new FormData();
         formData.append('file', file);
-        fetch('http://localhost:8080/api/file', {
+        fetch('http://ec2-13-54-204-8.ap-southeast-2.compute.amazonaws.com:8080/api/file', {
             method: 'POST',
             // headers: {'Content-Type': 'multipart/form-data'},
             body: formData
@@ -221,7 +221,7 @@
         });
     });
     function delete_extension(extension){
-        fetch('http://localhost:8080/api/extension', {
+        fetch('http://ec2-13-54-204-8.ap-southeast-2.compute.amazonaws.com:8080/api/extension', {
             method: 'DELETE',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({'extension': extension})
